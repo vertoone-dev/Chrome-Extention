@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuideSnap — Editor</title>
+  <link rel="stylesheet" href="../assets/styles/variables.css">
+  <link rel="stylesheet" href="../assets/styles/base.css">
+  <link rel="stylesheet" href="../assets/styles/animations.css">
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar__left">
+      <button id="backBtn" class="btn btn-icon" title="Back to guides">←</button>
+      <span id="guideTitle" class="topbar__title" contenteditable="true" spellcheck="false">Untitled Guide</span>
+    </div>
+    <div class="topbar__right">
+      <div class="export-wrapper">
+        <button id="exportBtn" class="btn btn-secondary">Export ▾</button>
+        <div id="exportDropdown" class="export-dropdown hidden">
+          <button data-export="html" class="export-dropdown__item">Export as HTML</button>
+          <button data-export="pdf" class="export-dropdown__item">Export as PDF</button>
+          <button data-export="json" class="export-dropdown__item">Export as JSON</button>
+          <button data-export="link" class="export-dropdown__item">Copy link</button>
+        </div>
+      </div>
+      <button id="saveBtn" class="btn btn-primary">Save</button>
+    </div>
+  </header>
+
+  <!-- Three-Column Layout -->
+  <main class="editor-layout">
+    <!-- Left Panel: Step List -->
+    <aside class="panel panel--left">
+      <div class="panel__header">
+        <h2 class="panel__heading">Steps</h2>
+      </div>
+      <div id="stepList" class="panel__body"></div>
+      <div class="panel__footer">
+        <button id="addStepBtn" class="btn btn-secondary" style="width:100%">+ Add Step</button>
+      </div>
+    </aside>
+
+    <!-- Center Panel: Canvas -->
+    <section class="panel panel--center">
+      <div id="toolbarContainer" class="toolbar-container"></div>
+      <div id="canvasContainer" class="canvas-container">
+        <canvas id="annotationCanvas"></canvas>
+        <div id="emptyState" class="empty-state">
+          <span class="empty-state__icon">🖼️</span>
+          <p class="empty-state__text">Select a step to edit</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Panel: Step Details -->
+    <aside class="panel panel--right">
+      <div id="stepDetails" class="step-details">
+        <div class="step-details__empty">
+          <p class="text-muted text-sm">Select a step to view details</p>
+        </div>
+        <div class="step-details__content hidden">
+          <label class="form-label">Description</label>
+          <textarea id="stepDescription" class="form-textarea" placeholder="Describe this step…"></textarea>
+
+          <label class="form-label">Metadata</label>
+          <div class="meta-grid">
+            <div class="meta-item">
+              <span class="meta-item__label">URL</span>
+              <span id="metaUrl" class="meta-item__value truncate">—</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-item__label">Timestamp</span>
+              <span id="metaTimestamp" class="meta-item__value">—</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-item__label">Element</span>
+              <span id="metaElement" class="meta-item__value">—</span>
+            </div>
+          </div>
+
+          <label class="form-label">Zoom</label>
+          <div class="zoom-controls">
+            <input id="zoomSlider" type="range" min="25" max="200" value="100" class="zoom-slider">
+            <span id="zoomValue" class="zoom-value text-sm">100%</span>
+          </div>
+
+          <button id="deleteStepBtn" class="btn btn-danger" style="width:100%;margin-top:auto">Delete Step</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script type="module" src="editor.js"></script>
+</body>
+</html>
