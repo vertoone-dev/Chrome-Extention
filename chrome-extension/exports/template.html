@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{GUIDE_TITLE}} — GuideSnap Export</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0f0f0f;
+    color: #f1f5f9;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Header */
+  .header {
+    width: 100%;
+    max-width: 960px;
+    padding: 40px 24px 24px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #f1f5f9;
+    margin-bottom: 8px;
+  }
+  .header .meta {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .header .meta span::before {
+    content: '·';
+    margin-right: 16px;
+  }
+  .header .meta span:first-child::before { content: ''; margin-right: 0; }
+
+  /* Slide area */
+  .slide-area {
+    width: 100%;
+    max-width: 900px;
+    padding: 0 24px;
+    margin-bottom: 16px;
+  }
+  .slide-card {
+    background: #1e1e2e;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    position: relative;
+  }
+  .slide-img-wrap {
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #16161e;
+    cursor: zoom-in;
+  }
+  .slide-img-wrap img {
+    width: 100%;
+    display: block;
+    opacity: 1;
+    transition: opacity 250ms ease, transform 250ms ease;
+  }
+  .slide-img-wrap img.fade-out {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  .slide-description {
+    padding: 24px 28px;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #f1f5f9;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .slide-description:empty { display: none; }
+  .slide-meta {
+    padding: 0 28px 20px;
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+  .slide-meta:empty { display: none; }
+
+  /* Step counter */
+  .step-counter {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    padding: 16px 0 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Navigation */
+  .nav-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0 24px;
+  }
+  .nav-btn {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 200ms ease, transform 200ms ease, opacity 200ms ease;
+    user-select: none;
+  }
+  .nav-btn:hover { background: #818cf8; transform: translateY(-1px); }
+  .nav-btn:active { transform: translateY(0); background: #4f46e5; }
+  .nav-btn:disabled {
+    background: #334155;
+    color: #64748b;
+    cursor: default;
+    transform: none;
+  }
+
+  /* Step dots */
+  .step-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 24px 32px;
+    flex-wrap: wrap;
+  }
+  .step-dots.hidden { display: none; }
+  .step-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #334155;
+    transition: background 200ms ease, transform 200ms ease;
+    cursor: pointer;
+  }
+  .step-dot.active {
+    background: #6366f1;
+    transform: scale(1.3);
+  }
+  .step-dot:hover { background: #818cf8; }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 250ms ease;
+  }
+  .lightbox.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .lightbox img {
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    transform: scale(0.95);
+    transition: transform 250ms ease;
+  }
+  .lightbox.open img { transform: scale(1); }
+  .lightbox-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: #64748b;
+    pointer-events: none;
+  }
+
+  /* Branding */
+  .branding {
+    position: fixed;
+    bottom: 16px;
+    right: 20px;
+    font-size: 0.75rem;
+    color: #475569;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header { padding: 28px 16px 16px; }
+    .header h1 { font-size: 1.35rem; }
+    .slide-area { padding: 0 12px; }
+    .slide-description { padding: 18px 20px; font-size: 0.95rem; }
+    .slide-meta { padding: 0 20px 16px; }
+    .nav-btn { padding: 10px 22px; font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1 id="guideTitle">{{GUIDE_TITLE}}</h1>
+  <div class="meta">
+    <span id="stepCount"></span>
+    <span id="createdAt">{{CREATED_AT}}</span>
+  </div>
+</div>
+
+<div class="slide-area">
+  <div class="slide-card">
+    <div class="slide-img-wrap" id="imgWrap">
+      <img id="slideImg" src="" alt="Step screenshot">
+    </div>
+    <div class="slide-description" id="slideDesc"></div>
+    <div class="slide-meta" id="slideMeta"></div>
+  </div>
+</div>
+
+<div class="step-counter" id="stepCounter"></div>
+
+<div class="nav-controls">
+  <button class="nav-btn" id="prevBtn">← Previous</button>
+  <button class="nav-btn" id="nextBtn">Next →</button>
+</div>
+
+<div class="step-dots" id="stepDots"></div>
+
+<div class="lightbox" id="lightbox">
+  <img id="lightboxImg" src="" alt="Full resolution screenshot">
+  <div class="lightbox-hint">Click anywhere or press Escape to close</div>
+</div>
+
+<div class="branding">Made with GuideSnap</div>
+
+<script>
+(function() {
+  var steps = {{STEPS_JSON}};
+  var currentStep = 0;
+  var totalSteps = steps.length;
+
+  var slideImg    = document.getElementById('slideImg');
+  var slideDesc   = document.getElementById('slideDesc');
+  var slideMeta   = document.getElementById('slideMeta');
+  var stepCounter = document.getElementById('stepCounter');
+  var stepCount   = document.getElementById('stepCount');
+  var prevBtn     = document.getElementById('prevBtn');
+  var nextBtn     = document.getElementById('nextBtn');
+  var imgWrap     = document.getElementById('imgWrap');
+  var lightbox    = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var dotsWrap    = document.getElementById('stepDots');
+
+  stepCount.textContent = totalSteps + ' step' + (totalSteps !== 1 ? 's' : '');
+
+  // Build dots (only for <= 20 steps)
+  if (totalSteps <= 20) {
+    for (var i = 0; i < totalSteps; i++) {
+      var dot = document.createElement('span');
+      dot.className = 'step-dot';
+      dot.setAttribute('data-index', i);
+      dot.addEventListener('click', function() {
+        showStep(parseInt(this.getAttribute('data-index'), 10));
+      });
+      dotsWrap.appendChild(dot);
+    }
+  } else {
+    dotsWrap.classList.add('hidden');
+  }
+
+  function showStep(index) {
+    if (index < 0 || index >= totalSteps) return;
+
+    slideImg.classList.add('fade-out');
+
+    setTimeout(function() {
+      currentStep = index;
+      var step = steps[currentStep];
+
+      slideImg.src = step.screenshotDataUrl || '';
+      slideImg.alt = 'Step ' + (currentStep + 1) + ' screenshot';
+      slideDesc.textContent = step.description || '';
+      slideMeta.textContent = step.meta || '';
+      stepCounter.textContent = 'Step ' + (currentStep + 1) + ' of ' + totalSteps;
+
+      prevBtn.disabled = currentStep === 0;
+      nextBtn.disabled = currentStep === totalSteps - 1;
+
+      // Update dots
+      var dots = dotsWrap.querySelectorAll('.step-dot');
+      for (var d = 0; d < dots.length; d++) {
+        dots[d].classList.toggle('active', d === currentStep);
+      }
+
+      // Trigger fade-in
+      void slideImg.offsetWidth;
+      slideImg.classList.remove('fade-out');
+
+      preloadAdjacent(currentStep);
+    }, 150);
+  }
+
+  function preloadAdjacent(index) {
+    var neighbors = [index - 1, index + 1];
+    for (var n = 0; n < neighbors.length; n++) {
+      var ni = neighbors[n];
+      if (ni >= 0 && ni < totalSteps && steps[ni].screenshotDataUrl) {
+        var img = new Image();
+        img.src = steps[ni].screenshotDataUrl;
+      }
+    }
+  }
+
+  // Navigation handlers
+  prevBtn.addEventListener('click', function() { showStep(currentStep - 1); });
+  nextBtn.addEventListener('click', function() { showStep(currentStep + 1); });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (lightbox.classList.contains('open')) {
+      if (e.key === 'Escape') closeLightbox();
+      return;
+    }
+    if (e.key === 'ArrowLeft')  showStep(currentStep - 1);
+    if (e.key === 'ArrowRight') showStep(currentStep + 1);
+  });
+
+  // Lightbox
+  function openLightbox() {
+    var src = steps[currentStep] && steps[currentStep].screenshotDataUrl;
+    if (!src) return;
+    lightboxImg.src = src;
+    lightbox.classList.add('open');
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+  }
+
+  imgWrap.addEventListener('click', openLightbox);
+  lightbox.addEventListener('click', closeLightbox);
+
+  // Initial render
+  showStep(0);
+})();
+</script>
+</body>
+</html>
