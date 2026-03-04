@@ -56,7 +56,7 @@ export function createStepCard(step, callbacks = {}) {
   // Delete button
   const deleteBtn = document.createElement('button');
   deleteBtn.className = 'step-card__delete-btn';
-  deleteBtn.innerHTML = '&#128465;'; // 🗑 trash icon
+  deleteBtn.textContent = '🗑️';
   deleteBtn.title = 'Delete step';
   deleteBtn.addEventListener('click', (e) => {
     e.stopPropagation();
