@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GuideSnap</title>
+  <link rel="stylesheet" href="../assets/styles/variables.css" />
+  <link rel="stylesheet" href="../assets/styles/base.css" />
+  <link rel="stylesheet" href="../assets/styles/animations.css" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <img src="../assets/icons/icon48.png" alt="GuideSnap" class="header-icon" />
+      <h1 class="header-title">GuideSnap</h1>
+    </header>
+
+    <main class="popup-main">
+      <button id="recordBtn" class="record-btn" type="button">
+        <span class="record-btn-icon">&#9679;</span>
+        <span class="record-btn-label">Start Recording</span>
+      </button>
+
+      <div class="capture-mode-toggle" id="captureMode">
+        <button class="capture-mode-option active" data-mode="viewport" type="button">Viewport</button>
+        <button class="capture-mode-option" data-mode="fullpage" type="button">Full Page</button>
+      </div>
+
+      <div id="stepCounter" class="step-counter hidden">
+        <span class="step-counter-dot"></span>
+        <span class="step-counter-text">0 steps</span>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="guides-header">
+        <h2 class="guides-title">My Guides</h2>
+        <span id="guideCount" class="guide-count">0</span>
+      </div>
+
+      <div id="guideList" class="guide-list"></div>
+
+      <p id="emptyState" class="empty-state">No guides yet. Start recording!</p>
+
+      <button id="importBtn" class="btn btn-secondary import-btn" type="button">
+        <span>&#8615;</span> Import Guide
+      </button>
+      <input id="importFile" type="file" accept=".json" class="hidden" />
+    </main>
+
+    <footer class="popup-footer">
+      <kbd>Alt+Shift+R</kbd> to toggle recording
+    </footer>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

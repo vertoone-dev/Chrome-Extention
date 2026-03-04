@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuideSnap — Viewer</title>
+  <link rel="stylesheet" href="../assets/styles/variables.css">
+  <link rel="stylesheet" href="../assets/styles/base.css">
+  <link rel="stylesheet" href="../assets/styles/animations.css">
+  <link rel="stylesheet" href="viewer.css">
+</head>
+<body>
+  <!-- Top Bar -->
+  <header class="viewer-topbar">
+    <span id="guideTitle" class="viewer-topbar__title">Untitled Guide</span>
+    <button id="closeBtn" class="viewer-topbar__close" title="Close viewer">✕</button>
+  </header>
+
+  <!-- Main Slide Area -->
+  <main class="viewer-stage">
+    <div id="slideContainer" class="slide-container">
+      <div id="slideWrapper" class="slide-wrapper">
+        <img id="slideImage" class="slide-image" alt="Step screenshot" />
+        <div id="clickPulse" class="click-pulse hidden"></div>
+      </div>
+      <p id="slideDescription" class="slide-description"></p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="emptyState" class="viewer-empty hidden">
+      <p>This guide has no steps.</p>
+    </div>
+  </main>
+
+  <!-- Bottom Bar -->
+  <footer class="viewer-bottombar">
+    <button id="prevBtn" class="nav-btn" title="Previous step">←</button>
+    <span id="stepCounter" class="step-counter">1 / 1</span>
+    <button id="nextBtn" class="nav-btn" title="Next step">→</button>
+  </footer>
+
+  <!-- Lightbox Overlay -->
+  <div id="lightbox" class="lightbox hidden">
+    <img id="lightboxImage" class="lightbox__image" alt="Zoomed screenshot" />
+  </div>
+
+  <!-- Watermark -->
+  <span class="watermark">Made with GuideSnap</span>
+
+  <script type="module" src="viewer.js"></script>
+</body>
+</html>
