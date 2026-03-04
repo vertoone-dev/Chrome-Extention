@@ -1,0 +1,291 @@
+/* ===== Popup Container ===== */
+.popup-container {
+  width: 280px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+/* ===== Header ===== */
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+}
+
+.header-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== Main ===== */
+.popup-main {
+  flex: 1;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ===== Record Button ===== */
+.record-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.record-btn:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+
+.record-btn:active {
+  transform: translateY(0);
+}
+
+.record-btn-icon {
+  font-size: var(--font-size-xs);
+}
+
+.record-btn.recording {
+  background: linear-gradient(135deg, var(--color-error), var(--color-accent));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ===== Capture Mode Toggle ===== */
+.capture-mode-toggle {
+  display: flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.capture-mode-option {
+  flex: 1;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  text-align: center;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.capture-mode-option:not(:last-child) {
+  border-right: 1px solid var(--color-border);
+}
+
+.capture-mode-option:hover {
+  background-color: var(--color-bg-input);
+  color: var(--color-text-primary);
+}
+
+.capture-mode-option.active {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+/* ===== Step Counter ===== */
+.step-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: center;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  animation: fadeIn var(--transition-base) ease;
+}
+
+.step-counter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-error);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ===== Divider ===== */
+.divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-1) 0;
+}
+
+/* ===== Guides Section ===== */
+.guides-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.guides-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.guide-count {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-input);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-full);
+}
+
+/* ===== Guide List ===== */
+.guide-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: var(--space-1);
+}
+
+/* ===== Guide Card ===== */
+.guide-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  animation: slideUp var(--transition-base) ease forwards;
+}
+
+.guide-card:hover {
+  border-color: var(--color-border-hover);
+  background-color: var(--color-bg-tertiary);
+}
+
+.guide-card-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background-color: var(--color-bg-input);
+  flex-shrink: 0;
+}
+
+.guide-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.guide-card-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.guide-card-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.guide-card-actions {
+  display: flex;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.guide-card:hover .guide-card-actions {
+  opacity: 1;
+}
+
+.guide-card-actions button {
+  padding: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.guide-card-actions button:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-input);
+}
+
+.guide-card-actions .delete-btn:hover {
+  color: var(--color-error);
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  padding: var(--space-6) 0;
+}
+
+/* ===== Import Button ===== */
+.import-btn {
+  width: 100%;
+  font-size: var(--font-size-xs);
+  justify-content: center;
+}
+
+/* ===== Footer ===== */
+.popup-footer {
+  padding: var(--space-2) var(--space-4);
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+}
+
+.popup-footer kbd {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  padding: 1px var(--space-1);
+  background-color: var(--color-bg-input);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
