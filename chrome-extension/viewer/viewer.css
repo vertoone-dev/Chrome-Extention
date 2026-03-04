@@ -1,0 +1,245 @@
+/* ===== Viewer — Full-screen slideshow ===== */
+
+/* Layout */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  background-color: #0f0f0f;
+}
+
+/* ─── Top Bar ─────────────────────────────────────────────────────────────── */
+
+.viewer-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  background-color: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.viewer-topbar__title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 70%;
+}
+
+.viewer-topbar__close {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-input);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.viewer-topbar__close:hover {
+  background-color: var(--color-error);
+  color: #fff;
+}
+
+/* ─── Stage (Slide Area) ──────────────────────────────────────────────────── */
+
+.viewer-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.slide-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 900px;
+  max-height: calc(100vh - 120px);
+  width: 100%;
+  padding: 0 var(--space-6);
+}
+
+.slide-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 200px);
+  width: 100%;
+}
+
+.slide-image {
+  max-width: 100%;
+  max-height: calc(100vh - 200px);
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  cursor: zoom-in;
+  transition: opacity 0.35s ease;
+}
+
+.slide-image.crossfade {
+  opacity: 0;
+}
+
+.slide-description {
+  margin-top: var(--space-4);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  max-width: 640px;
+  animation: fadeIn 0.35s ease;
+}
+
+.viewer-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+
+/* ─── Click Pulse Overlay ─────────────────────────────────────────────────── */
+
+.click-pulse {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.click-pulse::before,
+.click-pulse::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.click-pulse::before {
+  width: 12px;
+  height: 12px;
+  background-color: rgba(244, 63, 94, 0.8);
+}
+
+.click-pulse::after {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(244, 63, 94, 0.6);
+  animation: clickPulse 1.5s ease-out infinite;
+}
+
+/* ─── Bottom Bar ──────────────────────────────────────────────────────────── */
+
+.viewer-bottombar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-3) var(--space-6);
+  background-color: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--color-border);
+}
+
+.nav-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-input);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xl);
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.nav-btn:hover {
+  background-color: var(--color-primary);
+  transform: scale(1.08);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  transform: none;
+}
+
+.nav-btn:disabled:hover {
+  background-color: var(--color-bg-input);
+}
+
+.step-counter {
+  min-width: 80px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+/* ─── Lightbox ────────────────────────────────────────────────────────────── */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.95);
+  cursor: zoom-out;
+  animation: fadeIn 0.2s ease;
+}
+
+.lightbox__image {
+  max-width: 95vw;
+  max-height: 95vh;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Watermark ───────────────────────────────────────────────────────────── */
+
+.watermark {
+  position: fixed;
+  bottom: 52px;
+  right: var(--space-4);
+  z-index: 5;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  user-select: none;
+}
